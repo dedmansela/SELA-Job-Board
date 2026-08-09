@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - SMU SELA Internship Board</title>
+    <title>Admin - SELA Job Board</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -22,12 +22,29 @@
             padding: 40px 20px;
             display: flex;
             justify-content: center;
+            position: relative;
+            min-height: 100vh;
         }
+
+        .corner-logo {
+            position: fixed;
+            width: 90px;
+            height: auto;
+            opacity: 0.85;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .top-left { top: 20px; left: 20px; }
+        .top-right { top: 20px; right: 20px; }
+        .bottom-left { bottom: 20px; left: 20px; }
+        .bottom-right { bottom: 20px; right: 20px; }
 
         .container {
             max-width: 1200px;
             width: 100%;
             margin: 0 auto;
+            position: relative;
+            z-index: 10;
         }
 
         .header {
@@ -35,35 +52,21 @@
             margin-bottom: 32px;
         }
 
-        .smu-badge {
-            display: inline-block;
-            background-color: #cc0000;
-            color: #ffffff;
-            font-family: 'Oswald', sans-serif;
-            font-size: 14px;
-            font-weight: 700;
-            letter-spacing: 2px;
-            padding: 6px 16px;
-            border-radius: 20px;
-            text-transform: uppercase;
-            margin-bottom: 12px;
+        .header-law-logo {
+            max-width: 380px;
+            width: 100%;
+            height: auto;
+            margin-bottom: 16px;
         }
 
         .header h1 {
             font-family: 'Oswald', sans-serif;
-            font-size: 56px;
+            font-size: 58px;
             font-weight: 700;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
             text-transform: uppercase;
             color: #354ca1;
-            margin-bottom: 8px;
             line-height: 1.1;
-        }
-
-        .header p {
-            font-size: 18px;
-            color: #475569;
-            font-weight: 500;
         }
 
         .admin-panel {
@@ -125,6 +128,11 @@
             border-color: #354ca1;
         }
 
+        .form-actions {
+            display: flex;
+            gap: 12px;
+        }
+
         .btn-add {
             background-color: #354ca1;
             color: #ffffff;
@@ -141,22 +149,29 @@
             background-color: #28397a;
         }
 
+        .btn-cancel {
+            background-color: #64748b;
+            color: #ffffff;
+            border: none;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            display: none;
+        }
+
         .job-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 24px;
+            margin-bottom: 40px;
         }
 
         @media (max-width: 768px) {
             .job-grid {
                 grid-template-columns: 1fr;
             }
-        }
-
-        .job-card-link {
-            text-decoration: none;
-            color: inherit;
-            display: block;
         }
 
         .job-card {
@@ -170,13 +185,6 @@
             transition: all 0.2s ease;
             height: 100%;
             border-left: 4px solid #354ca1;
-        }
-
-        .job-card:hover {
-            border-color: #cbd5e1;
-            border-left-color: #cc0000;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.06);
-            transform: translateY(-3px);
         }
 
         .company-logo {
@@ -258,38 +266,42 @@
             position: absolute;
             top: 20px;
             right: 20px;
+            display: flex;
+            gap: 6px;
             z-index: 10;
         }
 
-        .btn-delete {
+        .btn-action {
             background: #ffffff;
-            border: 1px solid #fee2e2;
-            color: #ef4444;
+            border: 1px solid #cbd5e1;
             font-size: 12px;
             font-weight: 600;
             cursor: pointer;
             padding: 4px 8px;
             border-radius: 4px;
-            transition: background-color 0.2s ease;
         }
 
-        .btn-delete:hover {
-            background-color: #fef2f2;
-        }
+        .btn-edit { color: #354ca1; border-color: #354ca1; }
+        .btn-delete { color: #ef4444; border-color: #fee2e2; }
     </style>
 </head>
 <body>
 
+    <img src="Logo.png" alt="SMU Mustang" class="corner-logo top-left">
+    <img src="Logo.png" alt="SMU Mustang" class="corner-logo top-right">
+    <img src="Logo.png" alt="SMU Mustang" class="corner-logo bottom-left">
+    <img src="Logo.png" alt="SMU Mustang" class="corner-logo bottom-right">
+
     <div class="container">
         <header class="header">
-            <div class="smu-badge">SMU DEDMAN SCHOOL OF LAW</div>
-            <h1>SMU SELA INTERNSHIP BOARD</h1>
-            <p>Admin Portal - Add and Manage Postings</p>
+            <img src="logo_smu.jpg" alt="SMU Dedman School of Law" class="header-law-logo">
+            <h1>SELA JOB BOARD</h1>
         </header>
 
         <section class="admin-panel">
-            <h2>Add New Job Posting</h2>
+            <h2 id="formHeading">Add New Job Posting</h2>
             <form id="jobForm">
+                <input type="hidden" id="editingId" value="">
                 <div class="form-grid">
                     <div class="input-group">
                         <label for="title">Job Title</label>
@@ -309,7 +321,7 @@
                             <option value="Sports">Sports</option>
                             <option value="Entertainment">Entertainment</option>
                             <option value="General In-House" selected>General In-House</option>
-                            <option value="Summer Associate">Summer Associate</option>
+                            <option value="Law Firm">Law Firm</option>
                         </select>
                     </div>
                     <div class="input-group">
@@ -329,7 +341,10 @@
                         <input type="url" id="logoUrl" placeholder="https://...">
                     </div>
                 </div>
-                <button type="submit" class="btn-add">Add Job Posting</button>
+                <div class="form-actions">
+                    <button type="submit" class="btn-add" id="submitBtn">Add Job Posting</button>
+                    <button type="button" class="btn-cancel" id="cancelBtn" onclick="resetForm()">Cancel Edit</button>
+                </div>
             </form>
         </section>
 
@@ -350,10 +365,14 @@
             }
         ];
 
-        let jobs = JSON.parse(localStorage.getItem('smu_sela_jobs_v3')) || defaultJobs;
+        let jobs = JSON.parse(localStorage.getItem('smu_sela_jobs_v4')) || defaultJobs;
 
         const jobContainer = document.getElementById('jobContainer');
         const jobForm = document.getElementById('jobForm');
+        const editingIdInput = document.getElementById('editingId');
+        const formHeading = document.getElementById('formHeading');
+        const submitBtn = document.getElementById('submitBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
 
         function renderJobs() {
             jobContainer.innerHTML = '';
@@ -368,28 +387,27 @@
 
                 cardWrapper.innerHTML = `
                     <div class="card-actions">
-                        <button class="btn-delete" onclick="deleteJob(event, ${job.id})">Remove</button>
+                        <button class="btn-action btn-edit" onclick="editJob(${job.id})">Edit</button>
+                        <button class="btn-action btn-delete" onclick="deleteJob(${job.id})">Remove</button>
                     </div>
-                    <a href="${job.appUrl}" target="_blank" rel="noopener noreferrer" class="job-card-link">
-                        <div class="job-card">
-                            <div class="company-logo">${logoHtml}</div>
-                            <div class="job-details">
-                                <div>
-                                    <div class="category-tag">${job.category || 'Opportunity'}</div>
-                                    <h2 class="job-title">${job.title}</h2>
-                                    <div class="company-name">${job.company}</div>
-                                    <div class="job-location">${job.location}</div>
-                                </div>
-                                <div class="job-deadline">${job.deadline}</div>
+                    <div class="job-card">
+                        <div class="company-logo">${logoHtml}</div>
+                        <div class="job-details">
+                            <div>
+                                <div class="category-tag">${job.category || 'Opportunity'}</div>
+                                <h2 class="job-title">${job.title}</h2>
+                                <div class="company-name">${job.company}</div>
+                                <div class="job-location">${job.location}</div>
                             </div>
+                            <div class="job-deadline">${job.deadline}</div>
                         </div>
-                    </a>
+                    </div>
                 `;
 
                 jobContainer.appendChild(cardWrapper);
             });
 
-            localStorage.setItem('smu_sela_jobs_v3', JSON.stringify(jobs));
+            localStorage.setItem('smu_sela_jobs_v4', JSON.stringify(jobs));
         }
 
         jobForm.addEventListener('submit', async (e) => {
@@ -397,6 +415,7 @@
 
             const fileInput = document.getElementById('logoFile');
             let logoData = document.getElementById('logoUrl').value;
+            const editId = editingIdInput.value;
 
             if (fileInput.files && fileInput.files[0]) {
                 logoData = await new Promise((resolve) => {
@@ -404,6 +423,9 @@
                     reader.onload = (event) => resolve(event.target.result);
                     reader.readAsDataURL(fileInput.files[0]);
                 });
+            } else if (editId) {
+                const existing = jobs.find(j => j.id == editId);
+                if (existing && !logoData) logoData = existing.logo;
             }
 
             const rawDeadline = document.getElementById('deadline').value;
@@ -411,27 +433,69 @@
                 ? rawDeadline 
                 : `Deadline: ${rawDeadline}`;
 
-            const newJob = {
-                id: Date.now(),
-                title: document.getElementById('title').value,
-                company: document.getElementById('company').value,
-                location: document.getElementById('location').value,
-                category: document.getElementById('category').value,
-                deadline: formattedDeadline,
-                appUrl: document.getElementById('appUrl').value,
-                logo: logoData
-            };
+            if (editId) {
+                // Edit existing
+                jobs = jobs.map(j => j.id == editId ? {
+                    id: Number(editId),
+                    title: document.getElementById('title').value,
+                    company: document.getElementById('company').value,
+                    location: document.getElementById('location').value,
+                    category: document.getElementById('category').value,
+                    deadline: formattedDeadline,
+                    appUrl: document.getElementById('appUrl').value,
+                    logo: logoData
+                } : j);
+            } else {
+                // Add new
+                const newJob = {
+                    id: Date.now(),
+                    title: document.getElementById('title').value,
+                    company: document.getElementById('company').value,
+                    location: document.getElementById('location').value,
+                    category: document.getElementById('category').value,
+                    deadline: formattedDeadline,
+                    appUrl: document.getElementById('appUrl').value,
+                    logo: logoData
+                };
+                jobs.unshift(newJob);
+            }
 
-            jobs.unshift(newJob);
+            resetForm();
             renderJobs();
-            jobForm.reset();
         });
 
-        function deleteJob(event, id) {
-            event.preventDefault();
-            event.stopPropagation();
-            jobs = jobs.filter(job => job.id !== id);
-            renderJobs();
+        function editJob(id) {
+            const job = jobs.find(j => j.id === id);
+            if (!job) return;
+
+            editingIdInput.value = job.id;
+            document.getElementById('title').value = job.title;
+            document.getElementById('company').value = job.company;
+            document.getElementById('location').value = job.location;
+            document.getElementById('category').value = job.category;
+            document.getElementById('deadline').value = job.deadline.replace(/^Deadline:\s*/i, '');
+            document.getElementById('appUrl').value = job.appUrl;
+            document.getElementById('logoUrl').value = job.logo.startsWith('data:') ? '' : job.logo;
+
+            formHeading.innerText = 'Edit Job Posting';
+            submitBtn.innerText = 'Update Posting';
+            cancelBtn.style.display = 'inline-block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetForm() {
+            jobForm.reset();
+            editingIdInput.value = '';
+            formHeading.innerText = 'Add New Job Posting';
+            submitBtn.innerText = 'Add Job Posting';
+            cancelBtn.style.display = 'none';
+        }
+
+        function deleteJob(id) {
+            if (confirm("Are you sure you want to remove this job posting?")) {
+                jobs = jobs.filter(job => job.id !== id);
+                renderJobs();
+            }
         }
 
         renderJobs();
