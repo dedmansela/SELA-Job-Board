@@ -199,25 +199,29 @@
             align-items: center;
         }
 
-        .job-deadline {
+        .job-badge {
             font-size: 12px;
             font-weight: 600;
-            color: #cc0000;
-            background-color: #fef2f2;
             padding: 4px 10px;
             border-radius: 6px;
             display: inline-block;
+        }
+
+        .deadline-badge {
+            color: #cc0000;
+            background-color: #fef2f2;
+            border: 1px solid #fee2e2;
+        }
+
+        .available-badge {
+            color: #cc0000;
+            background-color: #fef2f2;
             border: 1px solid #fee2e2;
         }
 
         .peruna-badge {
-            font-size: 12px;
-            font-weight: 600;
             color: #354ca1;
             background-color: #eff6ff;
-            padding: 4px 10px;
-            border-radius: 6px;
-            display: inline-block;
             border: 1px solid #dbeafe;
         }
 
@@ -354,8 +358,12 @@
                     ? `<img src="${job.logo}" alt="${job.company} Logo" onerror="this.onerror=null; this.parentElement.innerText='${job.company ? job.company[0] : 'S'}';">`
                     : (job.company ? job.company.charAt(0) : 'S');
 
+                const availableBadgeHtml = (job.availableTo && job.availableTo.length > 0)
+                    ? `<div class="job-badge available-badge">Available to: ${job.availableTo.join(', ')}</div>`
+                    : '';
+
                 const perunaBadgeHtml = job.onPeruna 
-                    ? `<div class="peruna-badge">Available on Peruna Pro</div>` 
+                    ? `<div class="job-badge peruna-badge">Available on Peruna Pro</div>` 
                     : '';
 
                 const cardWrapper = document.createElement('a');
@@ -375,7 +383,8 @@
                                 <div class="job-location">${job.location}</div>
                             </div>
                             <div class="badges-row">
-                                <div class="job-deadline">${job.deadline}</div>
+                                <div class="job-badge deadline-badge">${job.deadline}</div>
+                                ${availableBadgeHtml}
                                 ${perunaBadgeHtml}
                             </div>
                         </div>
