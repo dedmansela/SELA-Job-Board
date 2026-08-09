@@ -17,8 +17,8 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #ffffff;
-            color: #111827;
+            background-color: #f8fafc;
+            color: #0f172a;
             padding: 40px 20px;
             display: flex;
             justify-content: center;
@@ -30,9 +30,25 @@
             margin: 0 auto;
         }
 
+        /* SMU Branded Header */
         .header {
             text-align: center;
-            margin-bottom: 48px;
+            margin-bottom: 36px;
+        }
+
+        .smu-badge {
+            display: inline-block;
+            background-color: #cc0000; /* SMU Red */
+            color: #ffffff;
+            font-family: 'Oswald', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            padding: 6px 16px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(204, 0, 0, 0.25);
         }
 
         .header h1 {
@@ -41,17 +57,52 @@
             font-weight: 700;
             letter-spacing: 0.5px;
             text-transform: uppercase;
-            color: #000000;
-            margin-bottom: 12px;
+            color: #354ca1; /* SMU Blue */
+            margin-bottom: 10px;
             line-height: 1.1;
         }
 
         .header p {
-            font-size: 20px;
-            color: #374151;
-            font-weight: 400;
+            font-size: 18px;
+            color: #475569;
+            font-weight: 500;
         }
 
+        /* Category Filter Pills */
+        .category-filters {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 40px;
+        }
+
+        .filter-btn {
+            background-color: #ffffff;
+            color: #354ca1;
+            border: 2px solid #e2e8f0;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .filter-btn:hover {
+            border-color: #354ca1;
+            background-color: #f1f5f9;
+        }
+
+        .filter-btn.active {
+            background-color: #354ca1;
+            color: #ffffff;
+            border-color: #354ca1;
+            box-shadow: 0 4px 12px rgba(53, 76, 161, 0.25);
+        }
+
+        /* Job Cards Grid */
         .job-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -71,33 +122,36 @@
         }
 
         .job-card {
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
             padding: 24px;
             display: flex;
             gap: 20px;
             position: relative;
             background-color: #ffffff;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+            transition: all 0.2s ease;
             height: 100%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            border-left: 4px solid #354ca1;
         }
 
         .job-card:hover {
-            border-color: #000000;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            transform: translateY(-2px);
+            border-color: #cbd5e1;
+            border-left-color: #cc0000;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.06);
+            transform: translateY(-3px);
         }
 
         .company-logo {
             width: 80px;
             height: 80px;
             flex-shrink: 0;
-            border-radius: 8px;
+            border-radius: 10px;
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #111827;
+            background-color: #354ca1;
             font-family: 'Oswald', sans-serif;
             font-size: 28px;
             font-weight: bold;
@@ -117,11 +171,20 @@
             justify-content: space-between;
         }
 
+        .category-tag {
+            font-size: 11px;
+            font-weight: 700;
+            color: #cc0000;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
         .job-title {
             font-family: 'Oswald', sans-serif;
             font-size: 26px;
             font-weight: 700;
-            color: #000000;
+            color: #0f172a;
             text-transform: uppercase;
             line-height: 1.2;
             margin-bottom: 4px;
@@ -131,36 +194,57 @@
         .company-name {
             font-size: 16px;
             font-weight: 700;
-            color: #111827;
+            color: #354ca1;
             margin-bottom: 6px;
         }
 
         .job-location {
             font-size: 13px;
             font-weight: 600;
-            color: #6b7280;
+            color: #64748b;
             margin-bottom: 12px;
         }
 
         .job-deadline {
             font-size: 12px;
             font-weight: 600;
-            color: #dc2626;
+            color: #cc0000;
             background-color: #fef2f2;
-            padding: 4px 8px;
-            border-radius: 4px;
+            padding: 4px 10px;
+            border-radius: 6px;
             display: inline-block;
             width: fit-content;
+            border: 1px solid #fee2e2;
+        }
+
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            color: #64748b;
+            font-size: 16px;
+            font-weight: 500;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
+        <!-- SMU SELA Branded Header -->
         <header class="header">
+            <div class="smu-badge">SMU DEDMAN SCHOOL OF LAW</div>
             <h1>SMU SELA INTERNSHIP BOARD</h1>
             <p>Sports and entertainment opportunities for SELA members</p>
         </header>
+
+        <!-- Category Filter Buttons -->
+        <div class="category-filters">
+            <button class="filter-btn active" onclick="filterCategory('All', this)">All Opportunities</button>
+            <button class="filter-btn" onclick="filterCategory('Sports', this)">Sports</button>
+            <button class="filter-btn" onclick="filterCategory('Entertainment', this)">Entertainment</button>
+            <button class="filter-btn" onclick="filterCategory('General In-House', this)">General In-House</button>
+            <button class="filter-btn" onclick="filterCategory('Summer Associate', this)">Summer Associate</button>
+        </div>
 
         <main class="job-grid" id="jobContainer"></main>
     </div>
@@ -169,30 +253,34 @@
         const defaultJobs = [
             {
                 id: 1,
-                title: "LEGAL INTERN",
-                company: "Legends Global",
-                location: "New York • NY",
-                deadline: "Deadline: Aug 25, 2026",
-                appUrl: "https://example.com/apply",
-                logo: "https://via.placeholder.com/80/000000/FFFFFF?text=L"
-            },
-            {
-                id: 2,
-                title: "CLIENT RELATIONS INTERN",
-                company: "ENA Sports Group",
-                location: "Dallas • TX • Hybrid",
+                title: "LEGAL EXTERN",
+                company: "McAfee",
+                location: "Frisco, TX",
+                category: "General In-House",
                 deadline: "Deadline: Rolling",
                 appUrl: "https://example.com/apply",
-                logo: "https://via.placeholder.com/80/D32F2F/FFFFFF?text=ENA"
+                logo: ""
             }
         ];
 
-        let jobs = JSON.parse(localStorage.getItem('smu_sela_jobs')) || defaultJobs;
+        let jobs = JSON.parse(localStorage.getItem('smu_sela_jobs_v3')) || defaultJobs;
+        let activeCategory = 'All';
+
         const jobContainer = document.getElementById('jobContainer');
 
         function renderJobs() {
             jobContainer.innerHTML = '';
-            jobs.forEach(job => {
+
+            const filteredJobs = activeCategory === 'All' 
+                ? jobs 
+                : jobs.filter(job => job.category === activeCategory);
+
+            if (filteredJobs.length === 0) {
+                jobContainer.innerHTML = `<div class="empty-state">No active postings under ${activeCategory} right now. Check back soon!</div>`;
+                return;
+            }
+
+            filteredJobs.forEach(job => {
                 const logoHtml = job.logo 
                     ? `<img src="${job.logo}" alt="${job.company} Logo" onerror="this.onerror=null; this.parentElement.innerText='${job.company[0]}';">`
                     : job.company.charAt(0);
@@ -208,6 +296,7 @@
                         <div class="company-logo">${logoHtml}</div>
                         <div class="job-details">
                             <div>
+                                <div class="category-tag">${job.category || 'Opportunity'}</div>
                                 <h2 class="job-title">${job.title}</h2>
                                 <div class="company-name">${job.company}</div>
                                 <div class="job-location">${job.location}</div>
@@ -218,6 +307,13 @@
                 `;
                 jobContainer.appendChild(cardWrapper);
             });
+        }
+
+        function filterCategory(category, btnElement) {
+            activeCategory = category;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+            renderJobs();
         }
 
         renderJobs();
