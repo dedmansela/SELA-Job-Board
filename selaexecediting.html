@@ -17,8 +17,8 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #f9fafb;
-            color: #111827;
+            background-color: #f8fafc;
+            color: #0f172a;
             padding: 40px 20px;
             display: flex;
             justify-content: center;
@@ -35,30 +35,45 @@
             margin-bottom: 32px;
         }
 
+        .smu-badge {
+            display: inline-block;
+            background-color: #cc0000;
+            color: #ffffff;
+            font-family: 'Oswald', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            padding: 6px 16px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
         .header h1 {
             font-family: 'Oswald', sans-serif;
             font-size: 56px;
             font-weight: 700;
             letter-spacing: 0.5px;
             text-transform: uppercase;
-            color: #000000;
-            margin-bottom: 12px;
+            color: #354ca1;
+            margin-bottom: 8px;
             line-height: 1.1;
         }
 
         .header p {
-            font-size: 20px;
-            color: #374151;
-            font-weight: 400;
+            font-size: 18px;
+            color: #475569;
+            font-weight: 500;
         }
 
         .admin-panel {
             background-color: #ffffff;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
             padding: 24px;
             margin-bottom: 40px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            border-top: 4px solid #cc0000;
         }
 
         .admin-panel h2 {
@@ -68,6 +83,7 @@
             text-transform: uppercase;
             font-family: 'Oswald', sans-serif;
             letter-spacing: 0.5px;
+            color: #354ca1;
         }
 
         .form-grid {
@@ -85,14 +101,14 @@
 
         .input-group label {
             font-size: 12px;
-            font-weight: 600;
-            color: #4b5563;
+            font-weight: 700;
+            color: #475569;
             text-transform: uppercase;
         }
 
-        .input-group input {
+        .input-group input, .input-group select {
             padding: 10px 12px;
-            border: 1px solid #d1d5db;
+            border: 1px solid #cbd5e1;
             border-radius: 6px;
             font-size: 14px;
             outline: none;
@@ -101,28 +117,28 @@
 
         .input-group input[type="file"] {
             padding: 8px;
-            background-color: #f9fafb;
+            background-color: #f8fafc;
             cursor: pointer;
         }
 
-        .input-group input:focus {
-            border-color: #000000;
+        .input-group input:focus, .input-group select:focus {
+            border-color: #354ca1;
         }
 
         .btn-add {
-            background-color: #000000;
+            background-color: #354ca1;
             color: #ffffff;
             border: none;
             padding: 12px 24px;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 700;
             border-radius: 6px;
             cursor: pointer;
             transition: background-color 0.2s ease;
         }
 
         .btn-add:hover {
-            background-color: #262626;
+            background-color: #28397a;
         }
 
         .job-grid {
@@ -144,33 +160,35 @@
         }
 
         .job-card {
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
             padding: 24px;
             display: flex;
             gap: 20px;
             position: relative;
             background-color: #ffffff;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+            transition: all 0.2s ease;
             height: 100%;
+            border-left: 4px solid #354ca1;
         }
 
         .job-card:hover {
-            border-color: #000000;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            transform: translateY(-2px);
+            border-color: #cbd5e1;
+            border-left-color: #cc0000;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.06);
+            transform: translateY(-3px);
         }
 
         .company-logo {
             width: 80px;
             height: 80px;
             flex-shrink: 0;
-            border-radius: 8px;
+            border-radius: 10px;
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #111827;
+            background-color: #354ca1;
             font-family: 'Oswald', sans-serif;
             font-size: 28px;
             font-weight: bold;
@@ -190,11 +208,20 @@
             justify-content: space-between;
         }
 
+        .category-tag {
+            font-size: 11px;
+            font-weight: 700;
+            color: #cc0000;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
         .job-title {
             font-family: 'Oswald', sans-serif;
             font-size: 26px;
             font-weight: 700;
-            color: #000000;
+            color: #0f172a;
             text-transform: uppercase;
             line-height: 1.2;
             margin-bottom: 4px;
@@ -204,26 +231,27 @@
         .company-name {
             font-size: 16px;
             font-weight: 700;
-            color: #111827;
+            color: #354ca1;
             margin-bottom: 6px;
         }
 
         .job-location {
             font-size: 13px;
             font-weight: 600;
-            color: #6b7280;
+            color: #64748b;
             margin-bottom: 12px;
         }
 
         .job-deadline {
             font-size: 12px;
             font-weight: 600;
-            color: #dc2626;
+            color: #cc0000;
             background-color: #fef2f2;
-            padding: 4px 8px;
-            border-radius: 4px;
+            padding: 4px 10px;
+            border-radius: 6px;
             display: inline-block;
             width: fit-content;
+            border: 1px solid #fee2e2;
         }
 
         .card-actions {
@@ -234,7 +262,7 @@
         }
 
         .btn-delete {
-            background: none;
+            background: #ffffff;
             border: 1px solid #fee2e2;
             color: #ef4444;
             font-size: 12px;
@@ -254,6 +282,7 @@
 
     <div class="container">
         <header class="header">
+            <div class="smu-badge">SMU DEDMAN SCHOOL OF LAW</div>
             <h1>SMU SELA INTERNSHIP BOARD</h1>
             <p>Admin Portal - Add and Manage Postings</p>
         </header>
@@ -273,6 +302,15 @@
                     <div class="input-group">
                         <label for="location">Location</label>
                         <input type="text" id="location" placeholder="e.g. Frisco, TX" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="category">Category</label>
+                        <select id="category" required>
+                            <option value="Sports">Sports</option>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="General In-House" selected>General In-House</option>
+                            <option value="Summer Associate">Summer Associate</option>
+                        </select>
                     </div>
                     <div class="input-group">
                         <label for="deadline">Application Deadline</label>
@@ -305,13 +343,14 @@
                 title: "LEGAL EXTERN",
                 company: "McAfee",
                 location: "Frisco, TX",
-                deadline: "Rolling",
+                category: "General In-House",
+                deadline: "Deadline: Rolling",
                 appUrl: "https://example.com/apply",
                 logo: ""
             }
         ];
 
-        let jobs = JSON.parse(localStorage.getItem('smu_sela_jobs')) || defaultJobs;
+        let jobs = JSON.parse(localStorage.getItem('smu_sela_jobs_v3')) || defaultJobs;
 
         const jobContainer = document.getElementById('jobContainer');
         const jobForm = document.getElementById('jobForm');
@@ -336,6 +375,7 @@
                             <div class="company-logo">${logoHtml}</div>
                             <div class="job-details">
                                 <div>
+                                    <div class="category-tag">${job.category || 'Opportunity'}</div>
                                     <h2 class="job-title">${job.title}</h2>
                                     <div class="company-name">${job.company}</div>
                                     <div class="job-location">${job.location}</div>
@@ -349,7 +389,7 @@
                 jobContainer.appendChild(cardWrapper);
             });
 
-            localStorage.setItem('smu_sela_jobs', JSON.stringify(jobs));
+            localStorage.setItem('smu_sela_jobs_v3', JSON.stringify(jobs));
         }
 
         jobForm.addEventListener('submit', async (e) => {
@@ -366,12 +406,18 @@
                 });
             }
 
+            const rawDeadline = document.getElementById('deadline').value;
+            const formattedDeadline = rawDeadline.toLowerCase().startsWith('deadline') 
+                ? rawDeadline 
+                : `Deadline: ${rawDeadline}`;
+
             const newJob = {
                 id: Date.now(),
                 title: document.getElementById('title').value,
                 company: document.getElementById('company').value,
                 location: document.getElementById('location').value,
-                deadline: document.getElementById('deadline').value,
+                category: document.getElementById('category').value,
+                deadline: formattedDeadline,
                 appUrl: document.getElementById('appUrl').value,
                 logo: logoData
             };
