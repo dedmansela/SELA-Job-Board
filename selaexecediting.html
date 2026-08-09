@@ -358,7 +358,6 @@
             const fileInput = document.getElementById('logoFile');
             let logoData = document.getElementById('logoUrl').value;
 
-            // If a local image file was uploaded, convert it to Data URL
             if (fileInput.files && fileInput.files[0]) {
                 logoData = await new Promise((resolve) => {
                     const reader = new FileReader();
