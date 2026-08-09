@@ -330,21 +330,27 @@
         <main class="job-grid" id="jobContainer"></main>
     </div>
 
-    <script>
-        const defaultJobs = [
-            {
-                id: 1,
-                title: "LEGAL EXTERN",
-                company: "McAfee",
-                location: "Frisco, TX",
-                category: "General In-House",
-                deadline: "Deadline: Rolling",
-                appUrl: "https://example.com/apply",
-                logo: ""
-            }
-        ];
+    <!-- Firebase Realtime Sync -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, push, set, remove, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-        let jobs = JSON.parse(localStorage.getItem('smu_sela_jobs_v4')) || defaultJobs;
+        const firebaseConfig = {
+            apiKey: "AIzaSyBSauAf8VSdz-Q_bB84MoRsFDJVWuZOSEk",
+            authDomain: "sela-job-board.firebaseapp.com",
+            databaseURL: "https://sela-job-board-default-rtdb.firebaseio.com",
+            projectId: "sela-job-board",
+            storageBucket: "sela-job-board.firebasestorage.app",
+            messagingSenderId: "877535394651",
+            appId: "1:877535394651:web:46bd7ce8b030af8dd1b87e",
+            measurementId: "G-Y4J1XLMJCT"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const jobsRef = ref(db, 'jobs');
+
+        let jobs = [];
 
         const jobContainer = document.getElementById('jobContainer');
         const jobForm = document.getElementById('jobForm');
@@ -353,21 +359,34 @@
         const submitBtn = document.getElementById('submitBtn');
         const cancelBtn = document.getElementById('cancelBtn');
 
+        // Listen for Realtime DB updates
+        onValue(jobsRef, (snapshot) => {
+            const data = snapshot.val();
+            jobs = [];
+            if (data) {
+                Object.keys(data).forEach(key => {
+                    jobs.push({ id: key, ...data[key] });
+                });
+                jobs.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+            }
+            renderJobs();
+        });
+
         function renderJobs() {
             jobContainer.innerHTML = '';
 
             jobs.forEach(job => {
                 const logoHtml = job.logo 
-                    ? `<img src="${job.logo}" alt="${job.company} Logo" onerror="this.onerror=null; this.parentElement.innerText='${job.company[0]}';">`
-                    : job.company.charAt(0);
+                    ? `<img src="${job.logo}" alt="${job.company} Logo" onerror="this.onerror=null; this.parentElement.innerText='${job.company ? job.company[0] : 'S'}';">`
+                    : (job.company ? job.company.charAt(0) : 'S');
 
                 const cardWrapper = document.createElement('div');
                 cardWrapper.style.position = 'relative';
 
                 cardWrapper.innerHTML = `
                     <div class="card-actions">
-                        <button class="btn-action btn-edit" onclick="editJob(${job.id})">Edit</button>
-                        <button class="btn-action btn-delete" onclick="deleteJob(${job.id})">Remove</button>
+                        <button class="btn-action btn-edit" onclick="editJob('${job.id}')">Edit</button>
+                        <button class="btn-action btn-delete" onclick="deleteJob('${job.id}')">Remove</button>
                     </div>
                     <div class="job-card">
                         <div class="company-logo">${logoHtml}</div>
@@ -385,8 +404,6 @@
 
                 jobContainer.appendChild(cardWrapper);
             });
-
-            localStorage.setItem('smu_sela_jobs_v4', JSON.stringify(jobs));
         }
 
         jobForm.addEventListener('submit', async (e) => {
@@ -403,7 +420,7 @@
                     reader.readAsDataURL(fileInput.files[0]);
                 });
             } else if (editId) {
-                const existing = jobs.find(j => j.id == editId);
+                const existing = jobs.find(j => j.id === editId);
                 if (existing && !logoData) logoData = existing.logo;
             }
 
@@ -412,36 +429,30 @@
                 ? rawDeadline 
                 : `Deadline: ${rawDeadline}`;
 
+            const jobPayload = {
+                title: document.getElementById('title').value,
+                company: document.getElementById('company').value,
+                location: document.getElementById('location').value,
+                category: document.getElementById('category').value,
+                deadline: formattedDeadline,
+                appUrl: document.getElementById('appUrl').value,
+                logo: logoData || "",
+                timestamp: Date.now()
+            };
+
             if (editId) {
-                jobs = jobs.map(j => j.id == editId ? {
-                    id: Number(editId),
-                    title: document.getElementById('title').value,
-                    company: document.getElementById('company').value,
-                    location: document.getElementById('location').value,
-                    category: document.getElementById('category').value,
-                    deadline: formattedDeadline,
-                    appUrl: document.getElementById('appUrl').value,
-                    logo: logoData
-                } : j);
+                // Update existing post in Firebase
+                set(ref(db, `jobs/${editId}`), jobPayload);
             } else {
-                const newJob = {
-                    id: Date.now(),
-                    title: document.getElementById('title').value,
-                    company: document.getElementById('company').value,
-                    location: document.getElementById('location').value,
-                    category: document.getElementById('category').value,
-                    deadline: formattedDeadline,
-                    appUrl: document.getElementById('appUrl').value,
-                    logo: logoData
-                };
-                jobs.unshift(newJob);
+                // Add new post to Firebase
+                const newRef = push(jobsRef);
+                set(newRef, jobPayload);
             }
 
             resetForm();
-            renderJobs();
         });
 
-        function editJob(id) {
+        window.editJob = function(id) {
             const job = jobs.find(j => j.id === id);
             if (!job) return;
 
@@ -452,30 +463,27 @@
             document.getElementById('category').value = job.category;
             document.getElementById('deadline').value = job.deadline.replace(/^Deadline:\s*/i, '');
             document.getElementById('appUrl').value = job.appUrl;
-            document.getElementById('logoUrl').value = job.logo.startsWith('data:') ? '' : job.logo;
+            document.getElementById('logoUrl').value = (job.logo && job.logo.startsWith('data:')) ? '' : (job.logo || '');
 
             formHeading.innerText = 'Edit Job Posting';
             submitBtn.innerText = 'Update Posting';
             cancelBtn.style.display = 'inline-block';
             window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+        };
 
-        function resetForm() {
+        window.resetForm = function() {
             jobForm.reset();
             editingIdInput.value = '';
             formHeading.innerText = 'Add New Job Posting';
             submitBtn.innerText = 'Add Job Posting';
             cancelBtn.style.display = 'none';
-        }
+        };
 
-        function deleteJob(id) {
+        window.deleteJob = function(id) {
             if (confirm("Are you sure you want to remove this job posting?")) {
-                jobs = jobs.filter(job => job.id !== id);
-                renderJobs();
+                remove(ref(db, `jobs/${id}`));
             }
-        }
-
-        renderJobs();
+        };
     </script>
 </body>
 </html>
