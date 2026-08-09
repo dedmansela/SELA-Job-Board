@@ -27,7 +27,7 @@
             overflow-x: hidden;
         }
 
-        /* 4 Corner Mustang Logo Watermarks */
+        /* Top Corner Mustang Logo Watermarks */
         .corner-logo {
             position: fixed;
             width: 90px;
@@ -38,8 +38,6 @@
         }
         .top-left { top: 20px; left: 20px; }
         .top-right { top: 20px; right: 20px; }
-        .bottom-left { bottom: 20px; left: 20px; }
-        .bottom-right { bottom: 20px; right: 20px; }
 
         .container {
             max-width: 1200px;
@@ -68,7 +66,7 @@
             font-weight: 700;
             letter-spacing: 1px;
             text-transform: uppercase;
-            color: #354ca1; /* SMU Blue */
+            color: #354ca1;
             line-height: 1.1;
         }
 
@@ -273,11 +271,9 @@
 </head>
 <body>
 
-    <!-- 4 Corner Mustang Logo Watermarks -->
+    <!-- Top Corner Mustang Logos Only -->
     <img src="Logo.png" alt="SMU Mustang" class="corner-logo top-left">
     <img src="Logo.png" alt="SMU Mustang" class="corner-logo top-right">
-    <img src="Logo.png" alt="SMU Mustang" class="corner-logo bottom-left">
-    <img src="Logo.png" alt="SMU Mustang" class="corner-logo bottom-right">
 
     <div class="container">
         <header class="header">
@@ -335,7 +331,6 @@
                 return;
             }
 
-            // Pagination slice
             const totalPages = Math.ceil(filteredJobs.length / itemsPerPage);
             if (currentPage > totalPages) currentPage = totalPages;
 
