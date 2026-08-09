@@ -273,21 +273,27 @@
         <div class="pagination" id="paginationControls"></div>
     </div>
 
-    <script>
-        const defaultJobs = [
-            {
-                id: 1,
-                title: "LEGAL EXTERN",
-                company: "McAfee",
-                location: "Frisco, TX",
-                category: "General In-House",
-                deadline: "Deadline: Rolling",
-                appUrl: "https://example.com/apply",
-                logo: ""
-            }
-        ];
+    <!-- Firebase Realtime Sync -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-        let jobs = JSON.parse(localStorage.getItem('smu_sela_jobs_v4')) || defaultJobs;
+        const firebaseConfig = {
+            apiKey: "AIzaSyBSauAf8VSdz-Q_bB84MoRsFDJVWuZOSEk",
+            authDomain: "sela-job-board.firebaseapp.com",
+            databaseURL: "https://sela-job-board-default-rtdb.firebaseio.com",
+            projectId: "sela-job-board",
+            storageBucket: "sela-job-board.firebasestorage.app",
+            messagingSenderId: "877535394651",
+            appId: "1:877535394651:web:46bd7ce8b030af8dd1b87e",
+            measurementId: "G-Y4J1XLMJCT"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const jobsRef = ref(db, 'jobs');
+
+        let jobs = [];
         let activeCategory = 'All';
         let currentPage = 1;
         const itemsPerPage = 10;
@@ -295,7 +301,20 @@
         const jobContainer = document.getElementById('jobContainer');
         const paginationControls = document.getElementById('paginationControls');
 
-        function renderJobs() {
+        // Realtime Database Listener
+        onValue(jobsRef, (snapshot) => {
+            const data = snapshot.val();
+            jobs = [];
+            if (data) {
+                Object.keys(data).forEach(key => {
+                    jobs.push({ id: key, ...data[key] });
+                });
+                jobs.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+            }
+            renderJobs();
+        });
+
+        window.renderJobs = function() {
             jobContainer.innerHTML = '';
 
             const filteredJobs = activeCategory === 'All' 
@@ -309,18 +328,18 @@
             }
 
             const totalPages = Math.ceil(filteredJobs.length / itemsPerPage);
-            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage > totalPages) currentPage = totalPages || 1;
 
             const startIndex = (currentPage - 1) * itemsPerPage;
             const paginatedJobs = filteredJobs.slice(startIndex, startIndex + itemsPerPage);
 
             paginatedJobs.forEach(job => {
                 const logoHtml = job.logo 
-                    ? `<img src="${job.logo}" alt="${job.company} Logo" onerror="this.onerror=null; this.parentElement.innerText='${job.company[0]}';">`
-                    : job.company.charAt(0);
+                    ? `<img src="${job.logo}" alt="${job.company} Logo" onerror="this.onerror=null; this.parentElement.innerText='${job.company ? job.company[0] : 'S'}';">`
+                    : (job.company ? job.company.charAt(0) : 'S');
 
                 const cardWrapper = document.createElement('a');
-                cardWrapper.href = job.appUrl;
+                cardWrapper.href = job.appUrl || '#';
                 cardWrapper.target = "_blank";
                 cardWrapper.rel = "noopener noreferrer";
                 cardWrapper.className = "job-card-link";
@@ -343,7 +362,7 @@
             });
 
             renderPagination(totalPages);
-        }
+        };
 
         function renderPagination(totalPages) {
             if (totalPages <= 1) {
@@ -358,21 +377,19 @@
             `;
         }
 
-        function changePage(direction) {
+        window.changePage = function(direction) {
             currentPage += direction;
             renderJobs();
             window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+        };
 
-        function filterCategory(category, btnElement) {
+        window.filterCategory = function(category, btnElement) {
             activeCategory = category;
             currentPage = 1;
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
             btnElement.classList.add('active');
             renderJobs();
-        }
-
-        renderJobs();
+        };
     </script>
 </body>
 </html>
