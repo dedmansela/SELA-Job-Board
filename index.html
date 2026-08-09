@@ -156,9 +156,10 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            padding-right: 80px; /* Space for absolute posted-ago badge */
         }
 
-        /* Distinct Category Tag Colors */
+        /* Category Tag Colors */
         .category-tag {
             font-size: 11px;
             font-weight: 700;
@@ -186,7 +187,7 @@
         .company-name {
             font-size: 16px;
             font-weight: 700;
-            color: #0f172a; /* Updated to Black */
+            color: #0f172a;
             margin-bottom: 6px;
         }
 
@@ -228,6 +229,21 @@
             color: #354ca1;
             background-color: #eff6ff;
             border: 1px solid #dbeafe;
+        }
+
+        /* Bottom-Right Time Ago Stamp */
+        .posted-ago-badge {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #64748b;
+            background-color: #f1f5f9;
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: 1px solid #e2e8f0;
+            letter-spacing: 0.2px;
         }
 
         /* Pagination Controls */
@@ -337,6 +353,28 @@
             }
         }
 
+        function timeAgo(timestamp) {
+            if (!timestamp) return 'Recently';
+            const seconds = Math.floor((Date.now() - timestamp) / 1000);
+            
+            let interval = Math.floor(seconds / 31536000);
+            if (interval >= 1) return interval + (interval === 1 ? ' year ago' : ' years ago');
+            
+            interval = Math.floor(seconds / 2592000);
+            if (interval >= 1) return interval + (interval === 1 ? ' month ago' : ' months ago');
+            
+            interval = Math.floor(seconds / 86400);
+            if (interval >= 1) return interval + (interval === 1 ? ' day ago' : ' days ago');
+            
+            interval = Math.floor(seconds / 3600);
+            if (interval >= 1) return interval + (interval === 1 ? ' hour ago' : ' hours ago');
+            
+            interval = Math.floor(seconds / 60);
+            if (interval >= 1) return interval + (interval === 1 ? ' min ago' : ' mins ago');
+            
+            return 'Just now';
+        }
+
         onValue(jobsRef, (snapshot) => {
             const data = snapshot.val();
             jobs = [];
@@ -382,6 +420,7 @@
                     : '';
 
                 const catClass = getCategoryClass(job.category);
+                const timeAgoText = timeAgo(job.timestamp);
 
                 const cardWrapper = document.createElement('a');
                 cardWrapper.href = job.appUrl || '#';
@@ -405,6 +444,7 @@
                                 ${perunaBadgeHtml}
                             </div>
                         </div>
+                        <div class="posted-ago-badge">${timeAgoText}</div>
                     </div>
                 `;
                 jobContainer.appendChild(cardWrapper);
