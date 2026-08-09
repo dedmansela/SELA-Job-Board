@@ -99,6 +99,12 @@
             font-family: inherit;
         }
 
+        .input-group input[type="file"] {
+            padding: 8px;
+            background-color: #f9fafb;
+            cursor: pointer;
+        }
+
         .input-group input:focus {
             border-color: #000000;
         }
@@ -258,27 +264,31 @@
                 <div class="form-grid">
                     <div class="input-group">
                         <label for="title">Job Title</label>
-                        <input type="text" id="title" placeholder="e.g. LEGAL INTERN" required>
+                        <input type="text" id="title" placeholder="e.g. LEGAL EXTERN" required>
                     </div>
                     <div class="input-group">
                         <label for="company">Company Name</label>
-                        <input type="text" id="company" placeholder="e.g. Legends Global" required>
+                        <input type="text" id="company" placeholder="e.g. McAfee" required>
                     </div>
                     <div class="input-group">
                         <label for="location">Location</label>
-                        <input type="text" id="location" placeholder="e.g. Dallas • TX" required>
+                        <input type="text" id="location" placeholder="e.g. Frisco, TX" required>
                     </div>
                     <div class="input-group">
                         <label for="deadline">Application Deadline</label>
-                        <input type="text" id="deadline" placeholder="e.g. Apply by Aug 30 or Rolling" required>
+                        <input type="text" id="deadline" placeholder="e.g. Rolling" required>
                     </div>
                     <div class="input-group">
                         <label for="appUrl">Application URL</label>
                         <input type="url" id="appUrl" placeholder="https://..." required>
                     </div>
                     <div class="input-group">
-                        <label for="logo">Logo Image URL (Optional)</label>
-                        <input type="url" id="logo" placeholder="https://...">
+                        <label for="logoFile">Upload Logo Photo</label>
+                        <input type="file" id="logoFile" accept="image/*">
+                    </div>
+                    <div class="input-group">
+                        <label for="logoUrl">Or Logo URL (Optional)</label>
+                        <input type="url" id="logoUrl" placeholder="https://...">
                     </div>
                 </div>
                 <button type="submit" class="btn-add">Add Job Posting</button>
@@ -292,21 +302,12 @@
         const defaultJobs = [
             {
                 id: 1,
-                title: "LEGAL INTERN",
-                company: "Legends Global",
-                location: "New York • NY",
-                deadline: "Deadline: Aug 25, 2026",
+                title: "LEGAL EXTERN",
+                company: "McAfee",
+                location: "Frisco, TX",
+                deadline: "Rolling",
                 appUrl: "https://example.com/apply",
-                logo: "https://via.placeholder.com/80/000000/FFFFFF?text=L"
-            },
-            {
-                id: 2,
-                title: "CLIENT RELATIONS INTERN",
-                company: "ENA Sports Group",
-                location: "Dallas • TX • Hybrid",
-                deadline: "Deadline: Rolling",
-                appUrl: "https://example.com/apply",
-                logo: "https://via.placeholder.com/80/D32F2F/FFFFFF?text=ENA"
+                logo: ""
             }
         ];
 
@@ -351,8 +352,20 @@
             localStorage.setItem('smu_sela_jobs', JSON.stringify(jobs));
         }
 
-        jobForm.addEventListener('submit', (e) => {
+        jobForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+
+            const fileInput = document.getElementById('logoFile');
+            let logoData = document.getElementById('logoUrl').value;
+
+            // If a local image file was uploaded, convert it to Data URL
+            if (fileInput.files && fileInput.files[0]) {
+                logoData = await new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onload = (event) => resolve(event.target.result);
+                    reader.readAsDataURL(fileInput.files[0]);
+                });
+            }
 
             const newJob = {
                 id: Date.now(),
@@ -361,7 +374,7 @@
                 location: document.getElementById('location').value,
                 deadline: document.getElementById('deadline').value,
                 appUrl: document.getElementById('appUrl').value,
-                logo: document.getElementById('logo').value
+                logo: logoData
             };
 
             jobs.unshift(newJob);
