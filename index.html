@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports Job Board</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #f9fafb;
+            color: #111827;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* Header Styling */
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .header h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 56px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: #000000;
+            margin-bottom: 12px;
+            line-height: 1.1;
+        }
+
+        .header p {
+            font-size: 20px;
+            color: #374151;
+            font-weight: 400;
+        }
+
+        /* Admin / Add Job Panel */
+        .admin-panel {
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 40px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .admin-panel h2 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            font-family: 'Oswald', sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .input-group label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #4b5563;
+            text-transform: uppercase;
+        }
+
+        .input-group input, .input-group select {
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            border-color: #000000;
+        }
+
+        .btn-add {
+            background-color: #000000;
+            color: #ffffff;
+            border: none;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-add:hover {
+            background-color: #262626;
+        }
+
+        /* Job Cards Grid */
+        .job-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .job-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Clickable Card Component */
+        .job-card-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .job-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 24px;
+            display: flex;
+            gap: 20px;
+            position: relative;
+            background-color: #ffffff;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+            height: 100%;
+        }
+
+        .job-card:hover {
+            border-color: #000000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+        }
+
+        /* Company Logo Box */
+        .company-logo {
+            width: 80px;
+            height: 80px;
+            flex-shrink: 0;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #111827;
+            font-family: 'Oswald', sans-serif;
+            font-size: 28px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .company-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Card Content Hierarchy */
+        .job-details {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .job-type {
+            font-size: 13px;
+            font-weight: 600;
+            color: #9ca3af;
+            margin-bottom: 4px;
+        }
+
+        .job-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 26px;
+            font-weight: 700;
+            color: #000000;
+            text-transform: uppercase;
+            line-height: 1.2;
+            margin-bottom: 4px;
+            letter-spacing: 0.2px;
+        }
+
+        .company-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 6px;
+        }
+
+        .job-location {
+            font-size: 13px;
+            font-weight: 600;
+            color: #6b7280;
+            margin-bottom: 12px;
+        }
+
+        .job-deadline {
+            font-size: 12px;
+            font-weight: 600;
+            color: #dc2626;
+            background-color: #fef2f2;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            width: fit-content;
+        }
+
+        /* Controls Area */
+        .card-actions {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 10;
+        }
+
+        .btn-delete {
+            background: none;
+            border: 1px solid #fee2e2;
+            color: #ef4444;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-delete:hover {
+            background-color: #fef2f2;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>Explore Top Sports Jobs</h1>
+            <p>Teams, agencies, technology companies, facilities, colleges, and more</p>
+        </header>
+
+        <!-- Admin Control Panel to Add Jobs -->
+        <section class="admin-panel">
+            <h2>Add New Job Posting</h2>
+            <form id="jobForm">
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label for="title">Job Title</label>
+                        <input type="text" id="title" placeholder="e.g. PREP COOK" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="company">Company Name</label>
+                        <input type="text" id="company" placeholder="e.g. Legends Global" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="location">Location</label>
+                        <input type="text" id="location" placeholder="e.g. New York • NY" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="type">Job Type</label>
+                        <select id="type">
+                            <option value="Entry Level">Entry Level</option>
+                            <option value="Part Time">Part Time</option>
+                            <option value="Full Time">Full Time</option>
+                            <option value="Internship">Internship</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="deadline">Application Deadline</label>
+                        <input type="text" id="deadline" placeholder="e.g. Apply by Aug 30 or Rolling" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="appUrl">Application URL</label>
+                        <input type="url" id="appUrl" placeholder="https://..." required>
+                    </div>
+                    <div class="input-group">
+                        <label for="logo">Logo Image URL (Optional)</label>
+                        <input type="url" id="logo" placeholder="https://...">
+                    </div>
+                </div>
+                <button type="submit" class="btn-add">Add Job Posting</button>
+            </form>
+        </section>
+
+        <!-- Job Grid -->
+        <main class="job-grid" id="jobContainer"></main>
+    </div>
+
+    <script>
+        // Sample Initial Data
+        const defaultJobs = [
+            {
+                id: 1,
+                title: "PREP COOK",
+                company: "Legends Global",
+                location: "New York • NY",
+                type: "Entry Level",
+                deadline: "Deadline: Aug 25, 2026",
+                appUrl: "https://example.com/apply/prep-cook",
+                logo: "https://via.placeholder.com/80/000000/FFFFFF?text=L"
+            },
+            {
+                id: 2,
+                title: "CLIENT RELATIONS",
+                company: "ENA Sports Group",
+                location: "Virginia Beach • VA • Remote",
+                type: "Part Time",
+                deadline: "Deadline: Rolling",
+                appUrl: "https://example.com/apply/client-relations",
+                logo: "https://via.placeholder.com/80/D32F2F/FFFFFF?text=ENA"
+            },
+            {
+                id: 3,
+                title: "SFDK SHOW ANNOUNCER $18.50/HR",
+                company: "Six Flags",
+                location: "Vallejo • CA",
+                type: "Entry Level",
+                deadline: "Deadline: Sept 01, 2026",
+                appUrl: "https://example.com/apply/show-announcer",
+                logo: "https://via.placeholder.com/80/1A237E/FFFFFF?text=SixFlags"
+            },
+            {
+                id: 4,
+                title: "ACCOUNT EXECUTIVE",
+                company: "Rocket City Trash Pandas",
+                location: "Madison • AL",
+                type: "Entry Level",
+                deadline: "Deadline: Aug 31, 2026",
+                appUrl: "https://example.com/apply/account-executive",
+                logo: "https://via.placeholder.com/80/000000/00FF00?text=Panda"
+            }
+        ];
+
+        let jobs = JSON.parse(localStorage.getItem('sports_jobs_v2')) || defaultJobs;
+
+        const jobContainer = document.getElementById('jobContainer');
+        const jobForm = document.getElementById('jobForm');
+
+        function renderJobs() {
+            jobContainer.innerHTML = '';
+
+            jobs.forEach(job => {
+                const logoHtml = job.logo 
+                    ? `<img src="${job.logo}" alt="${job.company} Logo" onerror="this.onerror=null; this.parentElement.innerText='${job.company[0]}';">`
+                    : job.company.charAt(0);
+
+                const cardWrapper = document.createElement('div');
+                cardWrapper.style.position = 'relative';
+
+                cardWrapper.innerHTML = `
+                    <div class="card-actions">
+                        <button class="btn-delete" onclick="deleteJob(event, ${job.id})">Remove</button>
+                    </div>
+                    <a href="${job.appUrl}" target="_blank" rel="noopener noreferrer" class="job-card-link">
+                        <div class="job-card">
+                            <div class="company-logo">${logoHtml}</div>
+                            <div class="job-details">
+                                <div>
+                                    <div class="job-type">${job.type}</div>
+                                    <h2 class="job-title">${job.title}</h2>
+                                    <div class="company-name">${job.company}</div>
+                                    <div class="job-location">${job.location}</div>
+                                </div>
+                                <div class="job-deadline">${job.deadline}</div>
+                            </div>
+                        </div>
+                    </a>
+                `;
+
+                jobContainer.appendChild(cardWrapper);
+            });
+
+            localStorage.setItem('sports_jobs_v2', JSON.stringify(jobs));
+        }
+
+        jobForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const newJob = {
+                id: Date.now(),
+                title: document.getElementById('title').value,
+                company: document.getElementById('company').value,
+                location: document.getElementById('location').value,
+                type: document.getElementById('type').value,
+                deadline: document.getElementById('deadline').value,
+                appUrl: document.getElementById('appUrl').value,
+                logo: document.getElementById('logo').value
+            };
+
+            jobs.unshift(newJob);
+            renderJobs();
+            jobForm.reset();
+        });
+
+        function deleteJob(event, id) {
+            event.preventDefault();
+            event.stopPropagation();
+            jobs = jobs.filter(job => job.id !== id);
+            renderJobs();
+        }
+
+        renderJobs();
+    </script>
+</body>
+</html>
