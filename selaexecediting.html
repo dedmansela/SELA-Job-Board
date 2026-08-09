@@ -247,14 +247,19 @@
             justify-content: space-between;
         }
 
+        /* Distinct Category Tag Colors */
         .category-tag {
             font-size: 11px;
             font-weight: 700;
-            color: #cc0000;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 4px;
         }
+
+        .category-tag.cat-sports { color: #354ca1; }
+        .category-tag.cat-entertainment { color: #cc0000; }
+        .category-tag.cat-general-in-house { color: #15803d; }
+        .category-tag.cat-law-firm { color: #0f172a; }
 
         .job-title {
             font-family: 'Oswald', sans-serif;
@@ -452,6 +457,16 @@
         const submitBtn = document.getElementById('submitBtn');
         const cancelBtn = document.getElementById('cancelBtn');
 
+        function getCategoryClass(category) {
+            switch ((category || '').toLowerCase()) {
+                case 'sports': return 'cat-sports';
+                case 'entertainment': return 'cat-entertainment';
+                case 'general in-house': return 'cat-general-in-house';
+                case 'law firm': return 'cat-law-firm';
+                default: return 'cat-sports';
+            }
+        }
+
         onValue(jobsRef, (snapshot) => {
             const data = snapshot.val();
             jobs = [];
@@ -480,6 +495,8 @@
                     ? `<div class="job-badge peruna-badge">Available on Peruna Pro</div>` 
                     : '';
 
+                const catClass = getCategoryClass(job.category);
+
                 const cardWrapper = document.createElement('div');
                 cardWrapper.style.position = 'relative';
 
@@ -492,7 +509,7 @@
                         <div class="company-logo">${logoHtml}</div>
                         <div class="job-details">
                             <div>
-                                <div class="category-tag">${job.category || 'Opportunity'}</div>
+                                <div class="category-tag ${catClass}">${job.category || 'Opportunity'}</div>
                                 <h2 class="job-title">${job.title}</h2>
                                 <div class="company-name">${job.company}</div>
                                 <div class="job-location">${job.location}</div>
