@@ -36,8 +36,6 @@
         }
         .top-left { top: 20px; left: 20px; }
         .top-right { top: 20px; right: 20px; }
-        .bottom-left { bottom: 20px; left: 20px; }
-        .bottom-right { bottom: 20px; right: 20px; }
 
         .container {
             max-width: 1200px;
@@ -287,10 +285,9 @@
 </head>
 <body>
 
+    <!-- Top Corner Mustang Logos Only -->
     <img src="Logo.png" alt="SMU Mustang" class="corner-logo top-left">
     <img src="Logo.png" alt="SMU Mustang" class="corner-logo top-right">
-    <img src="Logo.png" alt="SMU Mustang" class="corner-logo bottom-left">
-    <img src="Logo.png" alt="SMU Mustang" class="corner-logo bottom-right">
 
     <div class="container">
         <header class="header">
@@ -434,7 +431,6 @@
                 : `Deadline: ${rawDeadline}`;
 
             if (editId) {
-                // Edit existing
                 jobs = jobs.map(j => j.id == editId ? {
                     id: Number(editId),
                     title: document.getElementById('title').value,
@@ -446,7 +442,6 @@
                     logo: logoData
                 } : j);
             } else {
-                // Add new
                 const newJob = {
                     id: Date.now(),
                     title: document.getElementById('title').value,
