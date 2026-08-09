@@ -245,7 +245,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding-right: 80px;
+            padding-right: 120px;
         }
 
         .category-tag {
@@ -319,18 +319,34 @@
             border: 1px solid #dbeafe;
         }
 
-        .posted-ago-badge {
+        /* TeamWork Online Style Split-Digit Timestamp Badge */
+        .tw-posted-badge {
             position: absolute;
             bottom: 20px;
             right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
             font-size: 11px;
             font-weight: 600;
-            color: #64748b;
-            background-color: #f1f5f9;
-            padding: 4px 8px;
-            border-radius: 4px;
-            border: 1px solid #e2e8f0;
-            letter-spacing: 0.2px;
+            color: #94a3b8;
+        }
+
+        .tw-digit-box {
+            background-color: #64748b;
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: monospace;
+            line-height: 1;
+        }
+
+        .tw-text {
+            color: #94a3b8;
+            font-size: 11px;
+            font-weight: 500;
         }
 
         .card-actions {
@@ -481,26 +497,32 @@
             }
         }
 
-        function timeAgo(timestamp) {
-            if (!timestamp) return 'Recently';
+        function formatTeamworkTime(timestamp) {
+            if (!timestamp) return '<span class="tw-digit-box">0</span><span class="tw-digit-box">1</span> <span class="tw-text">hour ago</span>';
+
             const seconds = Math.floor((Date.now() - timestamp) / 1000);
-            
-            let interval = Math.floor(seconds / 31536000);
-            if (interval >= 1) return interval + (interval === 1 ? ' year ago' : ' years ago');
-            
-            interval = Math.floor(seconds / 2592000);
-            if (interval >= 1) return interval + (interval === 1 ? ' month ago' : ' months ago');
-            
-            interval = Math.floor(seconds / 86400);
-            if (interval >= 1) return interval + (interval === 1 ? ' day ago' : ' days ago');
-            
-            interval = Math.floor(seconds / 3600);
-            if (interval >= 1) return interval + (interval === 1 ? ' hour ago' : ' hours ago');
-            
-            interval = Math.floor(seconds / 60);
-            if (interval >= 1) return interval + (interval === 1 ? ' min ago' : ' mins ago');
-            
-            return 'Just now';
+            const hours = Math.floor(seconds / 3600);
+
+            let val = 1;
+            let unit = 'hour';
+
+            if (hours < 1) {
+                val = 1;
+                unit = 'hour';
+            } else if (hours < 24) {
+                val = hours;
+                unit = hours === 1 ? 'hour' : 'hours';
+            } else {
+                const days = Math.floor(hours / 24);
+                val = days;
+                unit = days === 1 ? 'day' : 'days';
+            }
+
+            const valStr = String(val).padStart(2, '0');
+            const d1 = valStr[0];
+            const d2 = valStr[1];
+
+            return `<span class="tw-digit-box">${d1}</span><span class="tw-digit-box">${d2}</span> <span class="tw-text">${unit} ago</span>`;
         }
 
         onValue(jobsRef, (snapshot) => {
@@ -532,7 +554,7 @@
                     : '';
 
                 const catClass = getCategoryClass(job.category);
-                const timeAgoText = timeAgo(job.timestamp);
+                const twTimeHtml = formatTeamworkTime(job.timestamp);
 
                 const cardWrapper = document.createElement('div');
                 cardWrapper.style.position = 'relative';
@@ -557,7 +579,7 @@
                                 ${perunaBadgeHtml}
                             </div>
                         </div>
-                        <div class="posted-ago-badge">${timeAgoText}</div>
+                        <div class="tw-posted-badge">${twTimeHtml}</div>
                     </div>
                 `;
 
