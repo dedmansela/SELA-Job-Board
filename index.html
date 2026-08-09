@@ -22,29 +22,13 @@
             padding: 40px 20px;
             display: flex;
             justify-content: center;
-            position: relative;
             min-height: 100vh;
-            overflow-x: hidden;
         }
-
-        /* Top Corner Mustang Logo Watermarks */
-        .corner-logo {
-            position: fixed;
-            width: 90px;
-            height: auto;
-            opacity: 0.85;
-            z-index: 0;
-            pointer-events: none;
-        }
-        .top-left { top: 20px; left: 20px; }
-        .top-right { top: 20px; right: 20px; }
 
         .container {
             max-width: 1200px;
             width: 100%;
             margin: 0 auto;
-            position: relative;
-            z-index: 10;
         }
 
         /* Header */
@@ -115,9 +99,6 @@
         @media (max-width: 768px) {
             .job-grid {
                 grid-template-columns: 1fr;
-            }
-            .corner-logo {
-                width: 55px;
             }
         }
 
@@ -270,10 +251,6 @@
     </style>
 </head>
 <body>
-
-    <!-- Top Corner Mustang Logos Only -->
-    <img src="Logo.png" alt="SMU Mustang" class="corner-logo top-left">
-    <img src="Logo.png" alt="SMU Mustang" class="corner-logo top-right">
 
     <div class="container">
         <header class="header">
