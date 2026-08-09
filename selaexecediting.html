@@ -112,17 +112,40 @@
             border-color: #354ca1;
         }
 
+        .options-section {
+            grid-column: 1 / -1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 8px;
+            padding-top: 12px;
+            border-top: 1px dashed #e2e8f0;
+        }
+
+        .checkbox-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .checkbox-label-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #475569;
+            text-transform: uppercase;
+            margin-right: 8px;
+        }
+
         .checkbox-group {
             display: flex;
             align-items: center;
-            gap: 8px;
-            margin-top: 10px;
-            grid-column: 1 / -1;
+            gap: 6px;
         }
 
         .checkbox-group input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
             cursor: pointer;
             accent-color: #354ca1;
         }
@@ -138,7 +161,7 @@
         .form-actions {
             display: flex;
             gap: 12px;
-            margin-top: 12px;
+            margin-top: 16px;
         }
 
         .btn-add {
@@ -265,25 +288,29 @@
             align-items: center;
         }
 
-        .job-deadline {
+        .job-badge {
             font-size: 12px;
             font-weight: 600;
-            color: #cc0000;
-            background-color: #fef2f2;
             padding: 4px 10px;
             border-radius: 6px;
             display: inline-block;
+        }
+
+        .deadline-badge {
+            color: #cc0000;
+            background-color: #fef2f2;
+            border: 1px solid #fee2e2;
+        }
+
+        .available-badge {
+            color: #cc0000;
+            background-color: #fef2f2;
             border: 1px solid #fee2e2;
         }
 
         .peruna-badge {
-            font-size: 12px;
-            font-weight: 600;
             color: #354ca1;
             background-color: #eff6ff;
-            padding: 4px 10px;
-            border-radius: 6px;
-            display: inline-block;
             border: 1px solid #dbeafe;
         }
 
@@ -360,9 +387,30 @@
                         <label for="logoUrl">Or Logo URL (Optional)</label>
                         <input type="url" id="logoUrl" placeholder="https://...">
                     </div>
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="onPeruna">
-                        <label for="onPeruna">Available on Peruna Pro</label>
+
+                    <div class="options-section">
+                        <div class="checkbox-row">
+                            <span class="checkbox-label-title">Available To:</span>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="avail1L" value="1L">
+                                <label for="avail1L">1L</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="avail2L" value="2L">
+                                <label for="avail2L">2L</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="avail3L" value="3L">
+                                <label for="avail3L">3L</label>
+                            </div>
+                        </div>
+
+                        <div class="checkbox-row">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="onPeruna">
+                                <label for="onPeruna">Available on Peruna Pro</label>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="form-actions">
@@ -424,8 +472,12 @@
                     ? `<img src="${job.logo}" alt="${job.company} Logo" onerror="this.onerror=null; this.parentElement.innerText='${job.company ? job.company[0] : 'S'}';">`
                     : (job.company ? job.company.charAt(0) : 'S');
 
+                const availableBadgeHtml = (job.availableTo && job.availableTo.length > 0)
+                    ? `<div class="job-badge available-badge">Available to: ${job.availableTo.join(', ')}</div>`
+                    : '';
+
                 const perunaBadgeHtml = job.onPeruna 
-                    ? `<div class="peruna-badge">Available on Peruna Pro</div>` 
+                    ? `<div class="job-badge peruna-badge">Available on Peruna Pro</div>` 
                     : '';
 
                 const cardWrapper = document.createElement('div');
@@ -446,7 +498,8 @@
                                 <div class="job-location">${job.location}</div>
                             </div>
                             <div class="badges-row">
-                                <div class="job-deadline">${job.deadline}</div>
+                                <div class="job-badge deadline-badge">${job.deadline}</div>
+                                ${availableBadgeHtml}
                                 ${perunaBadgeHtml}
                             </div>
                         </div>
@@ -480,6 +533,11 @@
                 ? rawDeadline 
                 : `Deadline: ${rawDeadline}`;
 
+            const selectedAvailable = [];
+            if (document.getElementById('avail1L').checked) selectedAvailable.push('1L');
+            if (document.getElementById('avail2L').checked) selectedAvailable.push('2L');
+            if (document.getElementById('avail3L').checked) selectedAvailable.push('3L');
+
             const jobPayload = {
                 title: document.getElementById('title').value,
                 company: document.getElementById('company').value,
@@ -488,6 +546,7 @@
                 deadline: formattedDeadline,
                 appUrl: document.getElementById('appUrl').value,
                 logo: logoData || "",
+                availableTo: selectedAvailable,
                 onPeruna: document.getElementById('onPeruna').checked,
                 timestamp: Date.now()
             };
@@ -514,6 +573,11 @@
             document.getElementById('deadline').value = job.deadline.replace(/^Deadline:\s*/i, '');
             document.getElementById('appUrl').value = job.appUrl;
             document.getElementById('logoUrl').value = (job.logo && job.logo.startsWith('data:')) ? '' : (job.logo || '');
+            
+            const avail = job.availableTo || [];
+            document.getElementById('avail1L').checked = avail.includes('1L');
+            document.getElementById('avail2L').checked = avail.includes('2L');
+            document.getElementById('avail3L').checked = avail.includes('3L');
             document.getElementById('onPeruna').checked = !!job.onPeruna;
 
             formHeading.innerText = 'Edit Job Posting';
@@ -525,6 +589,9 @@
         window.resetForm = function() {
             jobForm.reset();
             editingIdInput.value = '';
+            document.getElementById('avail1L').checked = false;
+            document.getElementById('avail2L').checked = false;
+            document.getElementById('avail3L').checked = false;
             document.getElementById('onPeruna').checked = false;
             formHeading.innerText = 'Add New Job Posting';
             submitBtn.innerText = 'Add Job Posting';
