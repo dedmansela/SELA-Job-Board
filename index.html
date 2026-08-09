@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SMU SELA Internship Board</title>
+    <title>SELA Job Board</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -22,50 +22,54 @@
             padding: 40px 20px;
             display: flex;
             justify-content: center;
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
         }
+
+        /* 4 Corner Mustang Logo Watermarks */
+        .corner-logo {
+            position: fixed;
+            width: 90px;
+            height: auto;
+            opacity: 0.85;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .top-left { top: 20px; left: 20px; }
+        .top-right { top: 20px; right: 20px; }
+        .bottom-left { bottom: 20px; left: 20px; }
+        .bottom-right { bottom: 20px; right: 20px; }
 
         .container {
             max-width: 1200px;
             width: 100%;
             margin: 0 auto;
+            position: relative;
+            z-index: 10;
         }
 
-        /* SMU Branded Header */
+        /* Header */
         .header {
             text-align: center;
-            margin-bottom: 36px;
+            margin-bottom: 32px;
         }
 
-        .smu-badge {
-            display: inline-block;
-            background-color: #cc0000; /* SMU Red */
-            color: #ffffff;
-            font-family: 'Oswald', sans-serif;
-            font-size: 14px;
-            font-weight: 700;
-            letter-spacing: 2px;
-            padding: 6px 16px;
-            border-radius: 20px;
-            text-transform: uppercase;
+        .header-law-logo {
+            max-width: 380px;
+            width: 100%;
+            height: auto;
             margin-bottom: 16px;
-            box-shadow: 0 2px 8px rgba(204, 0, 0, 0.25);
         }
 
         .header h1 {
             font-family: 'Oswald', sans-serif;
-            font-size: 56px;
+            font-size: 58px;
             font-weight: 700;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
             text-transform: uppercase;
             color: #354ca1; /* SMU Blue */
-            margin-bottom: 10px;
             line-height: 1.1;
-        }
-
-        .header p {
-            font-size: 18px;
-            color: #475569;
-            font-weight: 500;
         }
 
         /* Category Filter Pills */
@@ -74,14 +78,14 @@
             justify-content: center;
             flex-wrap: wrap;
             gap: 10px;
-            margin-bottom: 40px;
+            margin-bottom: 36px;
         }
 
         .filter-btn {
             background-color: #ffffff;
             color: #354ca1;
             border: 2px solid #e2e8f0;
-            padding: 10px 20px;
+            padding: 10px 22px;
             border-radius: 30px;
             font-size: 14px;
             font-weight: 600;
@@ -107,11 +111,15 @@
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 24px;
+            margin-bottom: 40px;
         }
 
         @media (max-width: 768px) {
             .job-grid {
                 grid-template-columns: 1fr;
+            }
+            .corner-logo {
+                width: 55px;
             }
         }
 
@@ -217,6 +225,42 @@
             border: 1px solid #fee2e2;
         }
 
+        /* Pagination Controls */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .page-btn {
+            background-color: #ffffff;
+            border: 1px solid #cbd5e1;
+            color: #354ca1;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .page-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .page-btn:not(:disabled):hover {
+            background-color: #354ca1;
+            color: #ffffff;
+        }
+
+        .page-info {
+            font-size: 14px;
+            font-weight: 600;
+            color: #475569;
+        }
+
         .empty-state {
             grid-column: 1 / -1;
             text-align: center;
@@ -229,12 +273,16 @@
 </head>
 <body>
 
+    <!-- 4 Corner Mustang Logo Watermarks -->
+    <img src="Logo.png" alt="SMU Mustang" class="corner-logo top-left">
+    <img src="Logo.png" alt="SMU Mustang" class="corner-logo top-right">
+    <img src="Logo.png" alt="SMU Mustang" class="corner-logo bottom-left">
+    <img src="Logo.png" alt="SMU Mustang" class="corner-logo bottom-right">
+
     <div class="container">
-        <!-- SMU SELA Branded Header -->
         <header class="header">
-            <div class="smu-badge">SMU DEDMAN SCHOOL OF LAW</div>
-            <h1>SMU SELA INTERNSHIP BOARD</h1>
-            <p>Sports and entertainment opportunities for SELA members</p>
+            <img src="logo_smu.jpg" alt="SMU Dedman School of Law" class="header-law-logo">
+            <h1>SELA JOB BOARD</h1>
         </header>
 
         <!-- Category Filter Buttons -->
@@ -243,10 +291,13 @@
             <button class="filter-btn" onclick="filterCategory('Sports', this)">Sports</button>
             <button class="filter-btn" onclick="filterCategory('Entertainment', this)">Entertainment</button>
             <button class="filter-btn" onclick="filterCategory('General In-House', this)">General In-House</button>
-            <button class="filter-btn" onclick="filterCategory('Summer Associate', this)">Summer Associate</button>
+            <button class="filter-btn" onclick="filterCategory('Law Firm', this)">Law Firm</button>
         </div>
 
         <main class="job-grid" id="jobContainer"></main>
+
+        <!-- Pagination Bar (10 per page) -->
+        <div class="pagination" id="paginationControls"></div>
     </div>
 
     <script>
@@ -263,10 +314,13 @@
             }
         ];
 
-        let jobs = JSON.parse(localStorage.getItem('smu_sela_jobs_v3')) || defaultJobs;
+        let jobs = JSON.parse(localStorage.getItem('smu_sela_jobs_v4')) || defaultJobs;
         let activeCategory = 'All';
+        let currentPage = 1;
+        const itemsPerPage = 10;
 
         const jobContainer = document.getElementById('jobContainer');
+        const paginationControls = document.getElementById('paginationControls');
 
         function renderJobs() {
             jobContainer.innerHTML = '';
@@ -277,10 +331,18 @@
 
             if (filteredJobs.length === 0) {
                 jobContainer.innerHTML = `<div class="empty-state">No active postings under ${activeCategory} right now. Check back soon!</div>`;
+                paginationControls.innerHTML = '';
                 return;
             }
 
-            filteredJobs.forEach(job => {
+            // Pagination slice
+            const totalPages = Math.ceil(filteredJobs.length / itemsPerPage);
+            if (currentPage > totalPages) currentPage = totalPages;
+
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const paginatedJobs = filteredJobs.slice(startIndex, startIndex + itemsPerPage);
+
+            paginatedJobs.forEach(job => {
                 const logoHtml = job.logo 
                     ? `<img src="${job.logo}" alt="${job.company} Logo" onerror="this.onerror=null; this.parentElement.innerText='${job.company[0]}';">`
                     : job.company.charAt(0);
@@ -307,10 +369,32 @@
                 `;
                 jobContainer.appendChild(cardWrapper);
             });
+
+            renderPagination(totalPages);
+        }
+
+        function renderPagination(totalPages) {
+            if (totalPages <= 1) {
+                paginationControls.innerHTML = '';
+                return;
+            }
+
+            paginationControls.innerHTML = `
+                <button class="page-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="changePage(-1)">Previous</button>
+                <span class="page-info">Page ${currentPage} of ${totalPages}</span>
+                <button class="page-btn" ${currentPage === totalPages ? 'disabled' : ''} onclick="changePage(1)">Next</button>
+            `;
+        }
+
+        function changePage(direction) {
+            currentPage += direction;
+            renderJobs();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function filterCategory(category, btnElement) {
             activeCategory = category;
+            currentPage = 1;
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
             btnElement.classList.add('active');
             renderJobs();
