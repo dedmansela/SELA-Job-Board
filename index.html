@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>SELA Job Board</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -165,7 +168,6 @@
         .category-tag.cat-sports { color: #354ca1; }
         .category-tag.cat-entertainment { color: #cc0000; }
         .category-tag.cat-general-in-house { color: #15803d; }
-        .category-tag.cat-law-firm { color: #0f172a; }
 
         .job-title {
             font-family: 'Oswald', sans-serif;
@@ -376,7 +378,6 @@
             <button class="filter-btn" onclick="filterCategory('Sports', this)">Sports</button>
             <button class="filter-btn" onclick="filterCategory('Entertainment', this)">Entertainment</button>
             <button class="filter-btn" onclick="filterCategory('General In-House', this)">General In-House</button>
-            <button class="filter-btn" onclick="filterCategory('Law Firm', this)">Law Firm</button>
         </div>
 
         <main class="job-grid" id="jobContainer"></main>
@@ -418,7 +419,6 @@
                 case 'sports': return 'cat-sports';
                 case 'entertainment': return 'cat-entertainment';
                 case 'general in-house': return 'cat-general-in-house';
-                case 'law firm': return 'cat-law-firm';
                 default: return 'cat-sports';
             }
         }
